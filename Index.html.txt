@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CLEAN MOHALLA – Fix Our Mohalla</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#2ecc71',
+                            600: '#1e5e4b',
+                            700: '#144537',
+                            800: '#0f382c',
+                            900: '#09241c',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Glassmorphism effects */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .dark .glass-panel {
+            background: rgba(15, 56, 44, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        .dark .glass-nav {
+            background: rgba(9, 36, 28, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2ecc71;
+            border-radius: 4px;
+        }
+        /* Animations */
+        @keyframes pulse-glow {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; filter: drop-shadow(0 0 10px rgba(46, 204, 113, 0.6)); }
+        }
+        .animate-glow {
+            animation: pulse-glow 3s infinite ease-in-out;
+        }
+        @keyframes scan-line {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+        .animate-scan {
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #2ecc71, transparent);
+            box-shadow: 0 0 8px #2ecc71;
+            animation: scan-line 2s infinite ease-in-out;
+        }
+        /* Hide scrollbars for clean UI */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-brand-900 text-gray-800 dark:text-gray-100 min-h-screen flex justify-center items-center transition-colors duration-300">
+
+    <!-- Mobile Frame Container for Desktop/Tablet Simulation & Native Mobile Display -->
+    <div id="app-shell" class="w-full max-w-md h-screen md:h-[92vh] md:max-h-[900px] md:rounded-[40px] md:shadow-2xl md:border-[8px] md:border-brand-800 flex flex-col overflow-hidden relative bg-gray-50 dark:bg-brand-900 transition-all duration-300">
+        
+        <!-- TOP APP BAR -->
+        <header class="bg-brand-800 text-white px-5 pt-4 pb-3 flex items-center justify-between z-30 shadow-md">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-full bg-brand-600 border-2 border-brand-500 flex items-center justify-center text-brand-500 shadow-inner">
+                    <i class="fa-solid fa-leaf text-xl animate-glow"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-base tracking-wide flex items-center gap-1.5 leading-tight">
+                        CLEAN MOHALLA
+                        <span class="bg-brand-500 text-brand-900 text-[10px] font-black px-1.5 py-0.5 rounded-full uppercase">PRO</span>
+                    </h1>
+                    <p class="text-[11px] text-brand-100 font-medium opacity-90">Fix Our Neighborhood</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-2">
+                <!-- Points Badge -->
+                <button onclick="switchTab('tab-home')" class="flex items-center gap-1 bg-brand-700/80 hover:bg-brand-700 px-2.5 py-1 rounded-full text-xs font-semibold text-emerald-300 border border-brand-600 transition">
+                    <i class="fa-solid fa-coins text-yellow-400"></i>
+                    <span id="user-points-badge">180</span>
+                </button>
+                
+                <!-- About Project Modal Button -->
+                <button onclick="openAboutModal()" class="w-8 h-8 rounded-full bg-brand-700 hover:bg-brand-600 flex items-center justify-center text-emerald-300 transition" title="About Authors & PBL Project">
+                    <i class="fa-solid fa-circle-info text-xs"></i>
+                </button>
+                
+                <!-- Dark/Light Mode Toggle -->
+                <button onclick="toggleDarkMode()" class="w-8 h-8 rounded-full bg-brand-700 hover:bg-brand-600 flex items-center justify-center text-yellow-300 transition" title="Toggle Theme">
+                    <i id="theme-icon" class="fa-solid fa-moon text-xs"></i>
+                </button>
+                
+                <!-- Admin Mode Switcher -->
+                <button onclick="toggleAdminModal()" id="admin-toggle-btn" class="w-8 h-8 rounded-full bg-brand-700 hover:bg-brand-600 flex items-center justify-center text-gray-200 transition relative" title="Admin Portal">
+                    <i class="fa-solid fa-user-shield text-xs"></i>
+                    <span id="admin-indicator" class="hidden absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-yellow-400 rounded-full border-2 border-brand-800"></span>
+                </button>
+            </div>
+        </header>
+
+        <!-- MAIN VIEWPORT CONTAINER (Scrollable) -->
+        <main id="main-content" class="flex-1 overflow-y-auto relative no-scrollbar pb-24">
+            
+            <!-- ========================================== -->
+            <!-- TAB 1: HOME -->
+            <!-- ========================================== -->
+            <section id="tab-home" class="tab-page p-4 space-y-4">
+                <!-- Dynamic Hero Banner -->
+                <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-800 via-brand-700 to-brand-600 text-white p-5 shadow-lg border border-brand-500/30">
+                    <div class="absolute -right-6 -bottom-6 opacity-15 text-9xl pointer-events-none">
+                        <i class="fa-solid fa-tree"></i>
+                    </div>
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <span class="bg-emerald-400/20 text-emerald-300 text-xs font-bold px-2.5 py-0.5 rounded-full border border-emerald-400/30">
+                                <i class="fa-solid fa-location-dot mr-1"></i> Sector G-8 Mohalla
+                            </span>
+                            <h2 class="text-xl font-bold mt-2">Welcome Back, Citizen!</h2>
+                            <p class="text-xs text-emerald-100/90 mt-0.5">Let's keep our mohalla waste-free today.</p>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-black text-emerald-300" id="hero-clean-score">88%</div>
+                            <div class="text-[10px] uppercase text-emerald-100 tracking-wider">Clean Score</div>
+                        </div>
+                    </div>
+
+                    <!-- Cleanliness Progress Bar -->
+                    <div class="w-full bg-brand-900/60 rounded-full h-2 mb-4 p-0.5 border border-brand-500/30 overflow-hidden">
+                        <div id="clean-score-bar" class="bg-gradient-to-r from-emerald-400 to-green-300 h-full rounded-full transition-all duration-1000" style="width: 88%;"></div>
+                    </div>
+
+                    <!-- Weather & AQI Quick Widget -->
+                    <div class="grid grid-cols-2 gap-2 bg-brand-900/40 rounded-2xl p-2.5 text-xs backdrop-blur-sm border border-white/10">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-wind text-emerald-300 text-sm"></i>
+                            <div>
+                                <span class="text-gray-300 block text-[10px]">Air Quality (AQI)</span>
+                                <span class="font-bold text-emerald-200">42 - Good</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-fire-flame-curved text-amber-300 text-sm"></i>
+                            <div>
+                                <span class="text-gray-300 block text-[10px]">Cleanup Streak</span>
+                                <span class="font-bold text-amber-200">7 Days 🔥</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Action Shortcuts Grid -->
+                <div class="grid grid-cols-4 gap-2">
+                    <button onclick="switchTab('tab-report')" class="flex flex-col items-center justify-center p-3 rounded-2xl bg-white dark:bg-brand-800 shadow-sm border border-gray-100 dark:border-brand-700/50 hover:border-brand-500 transition group active:scale-95">
+                        <div class="w-11 h-11 rounded-2xl bg-emerald-100 dark:bg-brand-700/80 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-1 group-hover:scale-110 transition shadow-inner">
+                            <i class="fa-solid fa-camera text-lg"></i>
+                        </div>
+                        <span class="text-[11px] font-semibold text-gray-700 dark:text-gray-200 text-center">AI Report</span>
+                    </button>
+
+                    <button onclick="switchTab('tab-chatbot')" class="flex flex-col items-center justify-center p-3 rounded-2xl bg-white dark:bg-brand-800 shadow-sm border border-gray-100 dark:border-brand-700/50 hover:border-brand-500 transition group active:scale-95">
+                        <div class="w-11 h-11 rounded-2xl bg-teal-100 dark:bg-teal-900/40 text-teal-600 dark:text-teal-400 flex items-center justify-center mb-1 group-hover:scale-110 transition shadow-inner">
+                            <i class="fa-solid fa-robot text-lg"></i>
+                        </div>
+                        <span class="text-[11px] font-semibold text-gray-700 dark:text-gray-200 text-center">Clean Bot</span>
+                    </button>
+
+                    <button onclick="switchTab('tab-heroes')" class="flex flex-col items-center justify-center p-3 rounded-2xl bg-white dark:bg-brand-800 shadow-sm border border-gray-100 dark:border-brand-700/50 hover:border-brand-500 transition group active:scale-95">
+                        <div class="w-11 h-11 rounded-2xl bg-yellow-100 dark:bg-yellow-900/40 text-yellow-600 dark:text-yellow-400 flex items-center justify-center mb-1 group-hover:scale-110 transition shadow-inner">
+                            <i class="fa-solid fa-trophy text-lg"></i>
+                        </div>
+                        <span class="text-[11px] font-semibold text-gray-700 dark:text-gray-200 text-center">Heroes</span>
+                    </button>
+
+                    <button onclick="switchTab('tab-map')" class="flex flex-col items-center justify-center p-3 rounded-2xl bg-white dark:bg-brand-800 shadow-sm border border-gray-100 dark:border-brand-700/50 hover:border-brand-500 transition group active:scale-95">
+                        <div class="w-11 h-11 rounded-2xl bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-1 group-hover:scale-110 transition shadow-inner">
+                            <i class="fa-solid fa-trash-can-arrow-up text-lg"></i>
+                        </div>
+                        <span class="text-[11px] font-semibold text-gray-700 dark:text-gray-200 text-center">Bins GIS</span>
+                    </button>
+                </div>
+
+                <!-- Stats Counter Summary -->
+                <div class="bg-white dark:bg-brand-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-brand-700/50">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-400 mb-3 flex items-center gap-1.5">
+                        <i class="fa-solid fa-chart-pie text-brand-500"></i> Mohalla Impact Analytics
+                    </h3>
+                    <div class="grid grid-cols-4 gap-2 text-center">
+                        <div class="bg-gray-50 dark:bg-brand-900/60 p-2 rounded-xl">
+                            <span class="block text-base font-black text-brand-600 dark:text-emerald-400" id="stat-total">42</span>
+                            <span class="text-[10px] text-gray-500 dark:text-gray-400">Total</span>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-brand-900/60 p-2 rounded-xl">
+                            <span class="block text-base font-black text-emerald-500" id="stat-resolved">35</span>
+                            <span class="text-[10px] text-gray-500 dark:text-gray-400">Cleaned</span>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-brand-900/60 p-2 rounded-xl">
+                            <span class="block text-base font-black text-amber-500" id="stat-pending">7</span>
+                            <span class="text-[10px] text-gray-500 dark:text-gray-400">Active</span>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-brand-900/60 p-2 rounded-xl">
+                            <span class="block text-base font-black text-blue-500">1.8T</span>
+                            <span class="text-[10px] text-gray-500 dark:text-gray-400">Recycled</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Community Leaderboard Quick Banner -->
+                <div onclick="switchTab('tab-heroes')" class="bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-500 text-white rounded-2xl p-4 shadow-md cursor-pointer hover:opacity-95 transition relative overflow-hidden">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <span class="text-[10px] bg-black/20 text-yellow-100 font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Monthly Contest</span>
+                            <h3 class="text-sm font-extrabold mt-1 flex items-center gap-1.5">
+                                <i class="fa-solid fa-crown text-yellow-200"></i> Who Will Be This Month's Winner?
+                            </h3>
+                            <p class="text-[11px] text-yellow-100 mt-0.5">Top garbage spotter wins the official Sanitation Award!</p>
+                        </div>
+                        <div class="text-right pl-2">
+                            <span class="text-xs bg-white text-amber-700 font-black px-2.5 py-1 rounded-xl shadow-sm block">View Ranks &rarr;</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Community Feed Preview Header -->
+                <div class="flex justify-between items-center pt-2">
+                    <h3 class="font-bold text-sm text-gray-800 dark:text-gray-200">Recent Community Reports</h3>
+                    <button onclick="switchTab('tab-community')" class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline">View All &rarr;</button>
+                </div>
+
+                <!-- Recent Preview List -->
+                <div id="home-recent-feed" class="space-y-3">
+                    <!-- Dynamic rendering will populate this -->
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- TAB 2: REPORT GARBAGE FORM -->
+            <!-- ========================================== -->
+            <section id="tab-report" class="tab-page hidden p-4 space-y-4">
+                <div class="bg-white dark:bg-brand-800 rounded-3xl p-5 shadow-sm border border-gray-100 dark:border-brand-700/50 space-y-4">
+                    <div class="flex items-center justify-between border-b pb-3 border-gray-100 dark:border-brand-700/50">
+                        <div>
+                            <h2 class="font-bold text-base text-gray-800 dark:text-gray-100 flex items-center gap-2">
+                                <i class="fa-solid fa-camera text-brand-500"></i> Report Garbage Spot
+                            </h2>
+                            <p class="text-[11px] text-gray-400">AI auto-classifies uploaded photographs</p>
+                        </div>
+                        <span class="bg-emerald-100 dark:bg-brand-700 text-brand-700 dark:text-emerald-300 text-[10px] font-bold px-2.5 py-1 rounded-full">+50 Points</span>
+                    </div>
+
+                    <form id="garbage-report-form" onsubmit="handleReportSubmit(event)" class="space-y-3">
+                        <!-- Name & Area -->
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[11px] font-bold text-gray-600 dark:text-gray-300 mb-1">Your Display Name</label>
+                                <input type="text" id="report-name" required value="Tariq Mansoor" class="w-full text-xs p-2.5 rounded-xl bg-gray-50 dark:bg-brand-900 border border-gray-200 dark:border-brand-700 text-gray-800 dark:text-gray-100 focus:outline-none focus:border-brand-500">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-gray-600 dark:text-gray-300 mb-1">Sector / Area</label>
+                                <div class="relative">
+                                    <input type="text" id="report-area" required value="Sector G-8" class="w-full text-xs p-2.5 pr-7 rounded-xl bg-gray-50 dark:bg-brand-900 border border-gray-200 dark:border-brand-700 text-gray-800 dark:text-gray-100 focus:outline-none focus:border-brand-500">
+                                    <button type="button" onclick="detectLocation()" class="absolute right-2 top-2.5 text-brand-500 text-xs" title="Auto-detect GPS">
+                                        <i class="fa-solid fa-location-crosshairs"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Optional House Number -->
+                        <div>
+                            <label class="block text-[11px] font-bold text-gray-600 dark:text-gray-300 mb-1">House / Landmark <span class="text-gray-400 font-normal">(Private)</span></label>
+                            <input type="text" id="report-house" placeholder="e.g. Near House 12-B / Central Park Gate" class="w-full text-xs p-2.5 rounded-xl bg-gray-50 dark:bg-brand-900 border border-gray-200 dark:border-brand-700 text-gray-800 dark:text-gray-100 focus:outline-none focus:border-brand-500">
+                        </div>
+
+                        <!-- Garbage Category -->
+                        <div>
+                            <label class="block text-[11px] font-bold text-gray-600 dark:text-gray-300 mb-1">Garbage Issue Type</label>
+                            <select id="report-category" required class="w-full text-xs p-2.5 rounded-xl bg-gray-50 dark:bg-brand-900 border border-gray-200 dark:border-brand-700 text-gray-800 dark:text-gray-100 focus:outline-none focus:border-brand-500">
+                                <option value="Plastic & Dry Packaging">Plastic & Dry Packaging</option>
+                                <option value="Organic & Food Waste Dump">Organic & Food Waste Dump</option>
+                                <option value="Overflowing Municipal Dumpster">Overflowing Municipal Dumpster</option>
+                                <option value="Construction & Building Debris">Construction & Building Debris</option>
+                                <option value="Hazardous / E-Waste Hazard">Hazardous / E-Waste Hazard</option>
+                            </select>
+                        </div>
+
+                        <!-- Severity Rating -->
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="text-[11px] font-bold text-gray-600 dark:text-gray-300">Severity Level</label>
+                                <span id="severity-label" class="text-xs font-extrabold text-amber-500">Medium Dump</span>
+                            </div>
+                            <input type="range" id="report-severity" min="1" max="3" value="2" oninput="updateSeverityLabel(this.value)" class="w-full accent-brand-500 h-1.5 bg-gray-200 dark:bg-brand-900 rounded-lg appearance-none cursor-pointer">
+                        </div>
+
+                        <!-- Description & Voice Input -->
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="text-[11px] font-bold text-gray-600 dark:text-gray-300">Problem Description</label>
+                                <button type="button" onclick="simulateVoiceInput()" class="text-[10px] text-brand-600 dark:text-emerald-400 font-semibold flex items-center gap-1 hover:underline">
+                                    <i class="fa-solid fa-microphone text-xs"></i> Voice Note
+                                </button>
+                            </div>
+                            <textarea id="report-desc" rows="3" required placeholder="Describe the size, smell, or immediate hazards..." class="w-full text-xs p-2.5 rounded-xl bg-gray-50 dark:bg-brand-900 border border-gray-200 dark:border-brand-700 text-gray-800 dark:text-gray-100 focus:outline-none focus:border-brand-500"></textarea>
+                        </div>
+
+                        <!-- Image Upload Box with AI Overlay Scanner -->
+                        <div>
+                            <label class="block text-[11px] font-bold text-gray-600 dark:text-gray-300 mb-1">Upload Photo (AI Scanner)</label>
+                            <div class="relative border-2 border-dashed border-gray-300 dark:border-brand-700 rounded-2xl p-4 text-center hover:border-brand-500 transition cursor-pointer bg-gray-50 dark:bg-brand-900/40">
+                                <input type="file" id="report-image-input" accept="image/*" onchange="handleImageUpload(event)" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10">
+                                
+                                <div id="upload-placeholder" class="space-y-1">
+                                    <i class="fa-solid fa-cloud-arrow-up text-2xl text-brand-500"></i>
+                                    <p class="text-xs font-semibold text-gray-700 dark:text-gray-200">Tap to upload photo or take picture</p>
+                                    <span class="text-[10px] text-gray-400 block">JPEG, PNG supported up to 10MB</span>
+                                </div>
+
+                                <div id="preview-container" class="hidden relative rounded-xl overflow-hidden max-h-40">
+                                    <img id="image-preview" src="" class="w-full h-full object-cover rounded-xl">
+                                    <div id="ai-scanner-line" class="animate-scan hidden"></div>
+                                    <span id="ai-tag-badge" class="hidden absolute top-2 right-2 bg-brand-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-full shadow">
+                                        <i class="fa-solid fa-robot mr-1"></i> <span id="ai-detected-text">AI Categorized</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Anonymous Toggle -->
+                        <div class="flex items-center space-x-2 pt-1">
+                            <input type="checkbox" id="report-anon" onchange="toggleAnonMode(this)" class="accent-brand-500 rounded">
+                            <label for="report-anon" class="text-xs text-gray-600 dark:text-gray-300">Submit Anonymously (Hide Name on Feed)</label>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-extrabold rounded-2xl shadow-lg transition transform active:scale-98 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-paper-plane"></i> Submit Report & Earn Points
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- TAB: AI CLEAN BOT CHATBOT -->
+            <!-- ========================================== -->
+            <section id="tab-chatbot" class="tab-page hidden p-4 space-y-4">
+                <div class="bg-white dark:bg-brand-800 rounded-3xl p-4 shadow-sm border border-gray-100 dark:border-brand-700/50 flex flex-col h-[70vh]">
+                    <!-- Chat Header -->
+                    <div class="flex items-center justify-between border-b pb-3 border-gray-100 dark:border-brand-700/50">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-emerald-100 dark:bg-brand-700 text-brand-600 dark:text-emerald-300 flex items-center justify-center text-lg shadow-inner">
+                                <i class="fa-solid fa-robot"></i>
+                            </div>
+                            <div>
+                                <h2 class="font-bold text-sm text-gray-800 dark:text-gray-100 flex items-center gap-1.5">
+                                    Clean Bot AI
+                                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                </h2>
+                                <p class="text-[10px] text-gray-400">Mohalla Knowledge & App Assistant</p>
+                            </div>
+                        </div>
+                        <button onclick="clearChatLog()" class="text-[11px] text-gray-400 hover:text-red-400">Clear</button>
+                    </div>
+
+                    <!-- Quick Suggestions -->
+                    <div class="py-2 flex gap-1.5 overflow-x-auto no-scrollbar text-[10px]">
+                        <button onclick="sendQuickPrompt('How do I report trash?')" class="bg-gray-100 dark:bg-brand-900 text-gray-700 dark:text-gray-200 px-2.5 py-1 rounded-full whitespace-nowrap hover:bg-emerald-100">📷 How to report?</button>
+                        <button onclick="sendQuickPrompt('How does the leaderboard work?')" class="bg-gray-100 dark:bg-brand-900 text-gray-700 dark:text-gray-200 px-2.5 py-1 rounded-full whitespace-nowrap hover:bg-emerald-100">👑 Monthly Leaderboard</button>
+                        <button onclick="sendQuickPrompt('Tips to keep Mohalla clean')" class="bg-gray-100 dark:bg-brand-900 text-gray-700 dark:text-gray-200 px-2.5 py-1 rounded-full whitespace-nowrap hover:bg-emerald-100">🌱 Sanitation Tips</button>
+                        <button onclick="sendQuickPrompt('Tell me about the authors')" class="bg-gray-100 dark:bg-brand-900 text-gray-700 dark:text-gray-200 px-2.5 py-1 rounded-full whitespace-nowrap hover:bg-emerald-100">👥 Authors</button>
+                    </div>
+
+                    <!-- Chat Messages Stream -->
+                    <div id="chat-messages-container" class="flex-1 overflow-y-auto space-y-3 p-2 no-scrollbar">
+                        <!-- Default Bot Welcome -->
+                        <div class="flex gap-2.5 items-start">
+                            <div class="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs shrink-0">
+                                <i class="fa-solid fa-robot"></i>
+                            </div>
+                            <div class="bg-emerald-50 dark:bg-brand-900 text-gray-800 dark:text-gray-100 p-3 rounded-2xl rounded-tl-none text-xs border border-emerald-100 dark:border-brand-700 max-w-[85%]">
+                                Assalamu Alaikum! I am <strong>Clean Bot</strong> 🍃. Ask me anything about waste management, sorting recyclables, or how our application works!
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Input Bar -->
+                    <form onsubmit="handleChatSubmit(event)" class="pt-2 border-t border-gray-100 dark:border-brand-700/50 flex gap-2">
+                        <input type="text" id="chat-input" placeholder="Type your question about Mohalla sanitation..." class="flex-1 text-xs p-3 rounded-xl bg-gray-50 dark:bg-brand-900 border border-gray-200 dark:border-brand-700 text-gray-800 dark:text-gray-100 focus:outline-none focus:border-brand-500">
+                        <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white px-4 rounded-xl text-xs font-bold transition flex items-center justify-center">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- TAB 3: MOHALLA HEROES (Monthly Leaderboard) -->
+            <!-- ========================================== -->
+            <section id="tab-heroes" class="tab-page hidden p-4 space-y-4">
+                
+                <!-- Monthly Winner Spotlight Banner -->
+                <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-600 via-yellow-600 to-brand-800 text-white p-5 shadow-xl border border-yellow-400/40">
+                    <div class="absolute -right-4 -top-4 opacity-20 text-9xl pointer-events-none">
+                        <i class="fa-solid fa-crown"></i>
+                    </div>
+                    
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="bg-yellow-400/20 text-yellow-200 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider border border-yellow-400/30 flex items-center gap-1">
+                            <i class="fa-solid fa-star text-yellow-300"></i> Champion of the Month
+                        </span>
+                        <span class="text-[11px] font-semibold text-yellow-100">November 2026</span>
+                    </div>
+
+                    <!-- Winner Card Info -->
+                    <div class="flex items-center space-x-4 my-2">
+                        <div class="relative">
+                            <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-yellow-300 to-amber-500 p-1 shadow-lg">
+                                <div class="w-full h-full rounded-full bg-brand-900 flex items-center justify-center font-black text-2xl text-yellow-300">
+                                    <span id="winner-avatar">G</span>
+                                </div>
+                            </div>
+                            <span class="absolute -top-2 -right-1 text-2xl drop-shadow-md">👑</span>
+                        </div>
+
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h2 class="text-lg font-black text-white" id="winner-name">Garjees Jawaid</h2>
+                                <span class="bg-yellow-400 text-brand-900 text-[9px] font-extrabold px-1.5 py-0.5 rounded uppercase">#1 Winner</span>
+                            </div>
+                            <p class="text-xs text-yellow-100 font-medium mt-0.5">Title: <span class="text-white font-bold" id="winner-title">Chief Sanitation Champion</span></p>
+                            <div class="flex items-center gap-3 mt-1.5 text-xs">
+                                <span class="bg-black/30 px-2 py-0.5 rounded-lg text-emerald-300 font-bold border border-emerald-400/20" id="winner-report-count"><i class="fa-solid fa-bullhorn mr-1"></i>120 Reports</span>
+                                <span class="bg-black/30 px-2 py-0.5 rounded-lg text-yellow-300 font-bold border border-yellow-400/20" id="winner-karma"><i class="fa-solid fa-shield-halved mr-1"></i>1,850 Karma</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="text-[11px] text-yellow-100/90 italic mt-3 bg-black/20 p-2 rounded-xl border border-white/10">
+                        "Reporting trash helps our government municipal teams clean up our mohalla instantly!"
+                    </p>
+                </div>
+
+                <!-- Live User Standing Card -->
+                <div class="bg-white dark:bg-brand-800 rounded-2xl p-4 shadow-sm border border-emerald-500/30 dark:border-brand-700/50">
+                    <div class="flex justify-between items-center mb-2">
+                        <div class="flex items-center gap-2">
+                            <div class="w-9 h-9 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold text-sm">
+                                T
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-xs text-gray-800 dark:text-gray-100">Your Standing: Citizen Reporter</h3>
+                                <span class="text-[10px] text-brand-600 dark:text-emerald-400 font-semibold" id="user-current-title">Eco Guardian</span>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-base font-black text-emerald-600 dark:text-emerald-400" id="user-monthly-reports">14 Reports</span>
+                            <span class="block text-[9px] text-gray-400 uppercase">Active Spotter</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Monthly Leaderboard Ranking Header -->
+                <div class="flex justify-between items-center pt-1">
+                    <div>
+                        <h3 class="font-bold text-sm text-gray-800 dark:text-gray-200">Mohalla Top Spotters</h3>
+                        <p class="text-[10px] text-gray-400">Rankings automatically update with every new garbage report!</p>
+                    </div>
+                    <span class="text-[10px] bg-brand-100 dark:bg-brand-700 text-brand-700 dark:text-emerald-300 font-bold px-2 py-1 rounded-full">Live Scoreboard</span>
+                </div>
+
+                <!-- Leaderboard List Container -->
+                <div id="heroes-leaderboard-list" class="space-y-2.5">
+                    <!-- Dynamically rendered hero cards -->
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- TAB 4: WASTE GUIDE (Interactive Eco-Hub) -->
+            <!-- ========================================== -->
+            <section id="tab-guide" class="tab-page hidden p-4 space-y-4">
+                
+                <!-- Search Items "Which Bin?" Lookup -->
+                <div class="bg-white dark:bg-brand-800 p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-brand-700/50">
+                    <h2 class="text-sm font-bold text-brand-800 dark:text-emerald-400 mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-magnifying-glass text-brand-500"></i> "Which Bin Does It Go In?" Search
+                    </h2>
+                    <div class="relative">
+                        <input type="text" id="waste-search-input" oninput="searchWasteItem(this.value)" placeholder="Search e.g. Pizza Box, Batteries, Milk Carton..." class="w-full text-xs p-3 pl-9 rounded-xl bg-gray-50 dark:bg-brand-900 border border-gray-200 dark:border-brand-700 text-gray-800 dark:text-gray-100 focus:outline-none focus:border-brand-500 transition">
+                        <i class="fa-solid fa-search absolute left-3 top-3.5 text-gray-400 text-xs"></i>
+                    </div>
+                    <!-- Quick Search Result Dropdown/Alert -->
+                    <div id="search-result-box" class="hidden mt-3 p-3 rounded-xl bg-emerald-50 dark:bg-brand-900/80 border border-emerald-200 dark:border-emerald-700 text-xs">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Waste Categories & Guidelines</h3>
+                    <span class="text-[10px] text-gray-400">Tap category for details</span>
+                </div>
+
+                <!-- Category Cards Grid -->
+                <div class="grid grid-cols-2 gap-3" id="guide-categories-grid">
+                    <!-- Populated via JS -->
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- TAB 5: DUSTBIN & RECYCLING LOCATIONS (GIS Map) -->
+            <!-- ========================================== -->
+            <section id="tab-map" class="tab-page hidden p-4 space-y-4">
+                <div class="bg-white dark:bg-brand-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-brand-700/50 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h2 class="text-sm font-bold text-brand-800 dark:text-emerald-400 flex items-center gap-2">
+                                <i class="fa-solid fa-map-location-dot text-brand-500"></i> Mohalla Smart Bins Map
+                            </h2>
+                            <p class="text-[11px] text-gray-500 dark:text-gray-400">Real-time fill sensors & recycling points</p>
+                        </div>
+                        <button onclick="refreshMapData()" class="text-xs text-brand-600 dark:text-emerald-400 hover:rotate-180 transition-transform duration-500 p-1" title="Refresh Bins">
+                            <i class="fa-solid fa-rotate-right text-sm"></i>
+                        </button>
+                    </div>
+
+                    <!-- Filter Chips -->
+                    <div class="flex gap-1.5 overflow-x-auto no-scrollbar pb-1 text-[11px]">
+                        <button onclick="filterBins('all')" class="bin-filter-btn px-3 py-1 rounded-full bg-brand-600 text-white font-semibold">All</button>
+                        <button onclick="filterBins('Organic')" class="bin-filter-btn px-3 py-1 rounded-full bg-gray-100 dark:bg-brand-700 text-gray-700 dark:text-gray-200 font-semibold">Organic</button>
+                        <button onclick="filterBins('Recyclable')" class="bin-filter-btn px-3 py-1 rounded-full bg-gray-100 dark:bg-brand-700 text-gray-700 dark:text-gray-200 font-semibold">Recyclables</button>
+                        <button onclick="filterBins('E-Waste')" class="bin-filter-btn px-3 py-1 rounded-full bg-gray-100 dark:bg-brand-700 text-gray-700 dark:text-gray-200 font-semibold">E-Waste</button>
+                    </div>
+
+                    <!-- Interactive Canvas GIS Map Container -->
+                    <div class="relative w-full h-64 rounded-2xl overflow-hidden border border-gray-200 dark:border-brand-700 bg-slate-900">
+                        <canvas id="gis-map-canvas" class="w-full h-full cursor-grab"></canvas>
+                        
+                        <!-- Map Overlay Controls -->
+                        <div class="absolute bottom-2 left-2 bg-slate-900/80 backdrop-blur text-white text-[10px] px-2 py-1 rounded-md border border-white/10">
+                            <i class="fa-solid fa-satellite mr-1 text-emerald-400"></i> Live Fill Telemetry Active
+                        </div>
+                        <div class="absolute top-2 right-2 flex flex-col gap-1">
+                            <button onclick="zoomMap(1.2)" class="w-7 h-7 bg-white dark:bg-brand-800 rounded-lg shadow text-xs font-bold text-gray-700 dark:text-gray-200 flex items-center justify-center">+</button>
+                            <button onclick="zoomMap(0.8)" class="w-7 h-7 bg-white dark:bg-brand-800 rounded-lg shadow text-xs font-bold text-gray-700 dark:text-gray-200 flex items-center justify-center">-</button>
+                        </div>
+                    </div>
+
+                    <!-- Selected Bin Info Drawer / Cards -->
+                    <div id="selected-bin-card" class="bg-gray-50 dark:bg-brand-900/60 p-3 rounded-xl border border-gray-200 dark:border-brand-700">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span id="bin-type-badge" class="bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-full">Organic & Food Bin</span>
+                                <h4 id="bin-name" class="font-bold text-xs mt-1 text-gray-800 dark:text-gray-100">Dustbin #MHL-04 (Market Square)</h4>
+                                <p id="bin-distance" class="text-[11px] text-gray-500 dark:text-gray-400">📍 120m away • 2 min walk</p>
+                            </div>
+                            <div class="text-right">
+                                <span id="bin-fill-percent" class="text-lg font-black text-amber-500">78%</span>
+                                <span class="block text-[9px] text-gray-400 uppercase">Capacity</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Fill progress bar -->
+                        <div class="w-full bg-gray-200 dark:bg-brand-800 rounded-full h-1.5 mt-2 overflow-hidden">
+                            <div id="bin-fill-bar" class="bg-amber-500 h-full rounded-full transition-all duration-500" style="width: 78%;"></div>
+                        </div>
+
+                        <div class="flex gap-2 mt-3">
+                            <button onclick="triggerDirections()" class="flex-1 py-1.5 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-diamond-turn-right text-xs"></i> Navigate
+                            </button>
+                            <button onclick="reportBinOverflow()" class="py-1.5 px-3 bg-red-100 dark:bg-red-900/40 hover:bg-red-200 text-red-600 dark:text-red-300 rounded-lg text-xs font-bold transition flex items-center gap-1">
+                                <i class="fa-solid fa-triangle-exclamation"></i> Report Full
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nearest Dustbin Quick List -->
+                <div class="space-y-2">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Nearby Smart Bins</h3>
+                    <div id="bins-list-container" class="space-y-2">
+                        <!-- Populated via JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- TAB 6: COMMUNITY REPORTS (Citizen & Admin) -->
+            <!-- ========================================== -->
+            <section id="tab-community" class="tab-page hidden p-4 space-y-4">
+                
+                <!-- Filter Bar & Search -->
+                <div class="bg-white dark:bg-brand-800 p-3 rounded-2xl shadow-sm border border-gray-100 dark:border-brand-700/50 space-y-2">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-sm font-bold text-brand-800 dark:text-emerald-400 flex items-center gap-2">
+                            <i class="fa-solid fa-comments text-brand-500"></i> Mohalla Citizen Feed
+                        </h2>
+                        <span id="active-mode-badge" class="bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-full">Citizen View</span>
+                    </div>
+
+                    <!-- Status Filter Chips -->
+                    <div class="flex gap-1.5 overflow-x-auto no-scrollbar pt-1 text-[11px]">
+                        <button onclick="filterCommunityFeed('all')" class="feed-filter-btn px-3 py-1 rounded-full bg-brand-600 text-white font-semibold">All</button>
+                        <button onclick="filterCommunityFeed('Pending')" class="feed-filter-btn px-3 py-1 rounded-full bg-gray-100 dark:bg-brand-700 text-gray-700 dark:text-gray-200 font-semibold">Pending</button>
+                        <button onclick="filterCommunityFeed('In Progress')" class="feed-filter-btn px-3 py-1 rounded-full bg-gray-100 dark:bg-brand-700 text-gray-700 dark:text-gray-200 font-semibold">In Progress</button>
+                        <button onclick="filterCommunityFeed('Resolved')" class="feed-filter-btn px-3 py-1 rounded-full bg-gray-100 dark:bg-brand-700 text-gray-700 dark:text-gray-200 font-semibold">Resolved</button>
+                    </div>
+                </div>
+
+                <!-- Feed Container -->
+                <div id="community-feed-container" class="space-y-4">
+                    <!-- Dynamic Reports Cards Render Here -->
+                </div>
+            </section>
+
+        </main>
+
+        <!-- FLOATING BOTTOM 7-TAB NAVIGATION BAR -->
+        <nav class="absolute bottom-0 left-0 right-0 glass-nav z-40 px-2 py-2 flex items-center justify-around shadow-lg">
+            <button onclick="switchTab('tab-home')" id="nav-tab-home" class="nav-btn flex flex-col items-center justify-center text-brand-600 dark:text-emerald-400 font-bold transition-all transform active:scale-95">
+                <i class="fa-solid fa-house-chimney text-base mb-0.5"></i>
+                <span class="text-[9px]">Home</span>
+            </button>
+
+            <button onclick="switchTab('tab-report')" id="nav-tab-report" class="nav-btn flex flex-col items-center justify-center text-gray-400 hover:text-brand-600 dark:hover:text-emerald-400 font-semibold transition-all transform active:scale-95">
+                <i class="fa-solid fa-circle-plus text-lg text-brand-500 mb-0.5 animate-pulse"></i>
+                <span class="text-[9px]">Report</span>
+            </button>
+
+            <button onclick="switchTab('tab-chatbot')" id="nav-tab-chatbot" class="nav-btn flex flex-col items-center justify-center text-gray-400 hover:text-brand-600 dark:hover:text-emerald-400 font-semibold transition-all transform active:scale-95">
+                <i class="fa-solid fa-robot text-base mb-0.5"></i>
+                <span class="text-[9px]">CleanBot</span>
+            </button>
+
+            <button onclick="switchTab('tab-heroes')" id="nav-tab-heroes" class="nav-btn flex flex-col items-center justify-center text-gray-400 hover:text-brand-600 dark:hover:text-emerald-400 font-semibold transition-all transform active:scale-95">
+                <i class="fa-solid fa-trophy text-base mb-0.5"></i>
+                <span class="text-[9px]">Heroes</span>
+            </button>
+
+            <button onclick="switchTab('tab-guide')" id="nav-tab-guide" class="nav-btn flex flex-col items-center justify-center text-gray-400 hover:text-brand-600 dark:hover:text-emerald-400 font-semibold transition-all transform active:scale-95">
+                <i class="fa-solid fa-recycle text-base mb-0.5"></i>
+                <span class="text-[9px]">Guide</span>
+            </button>
+
+            <button onclick="switchTab('tab-map')" id="nav-tab-map" class="nav-btn flex flex-col items-center justify-center text-gray-400 hover:text-brand-600 dark:hover:text-emerald-400 font-semibold transition-all transform active:scale-95">
+                <i class="fa-solid fa-map-pin text-base mb-0.5"></i>
+                <span class="text-[9px]">Bins</span>
+            </button>
+
+            <button onclick="switchTab('tab-community')" id="nav-tab-community" class="nav-btn flex flex-col items-center justify-center text-gray-400 hover:text-brand-600 dark:hover:text-emerald-400 font-semibold transition-all transform active:scale-95">
+                <i class="fa-solid fa-users text-base mb-0.5"></i>
+                <span class="text-[9px]">Feed</span>
+            </button>
+        </nav>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 1: REPORT DETAILS MODAL              -->
+    <!-- ========================================== -->
+    <div id="report-detail-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-brand-800 w-full max-w-md rounded-3xl overflow-hidden shadow-2xl max-h-[85vh] flex flex-col border border-gray-100 dark:border-brand-700">
+            <!-- Modal Header -->
+            <div class="p-4 bg-brand-800 text-white flex justify-between items-center">
+                <div>
+                    <span id="modal-report-id" class="text-[10px] font-mono text-emerald-300 uppercase">#MHL-8942</span>
+                    <h3 id="modal-report-title" class="font-bold text-sm">Overflowing Plastic Dump</h3>
+                </div>
+                <button onclick="closeReportModal()" class="w-7 h-7 rounded-full bg-brand-700 hover:bg-brand-600 text-white flex items-center justify-center text-xs">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Modal Content (Scrollable) -->
+            <div class="p-4 overflow-y-auto space-y-4 text-xs">
+                <!-- Status Timeline Bar -->
+                <div class="bg-gray-50 dark:bg-brand-900 p-3 rounded-xl">
+                    <div class="flex justify-between text-[10px] font-bold text-gray-500 mb-1">
+                        <span>Status Progress</span>
+                        <span id="modal-status-text" class="text-amber-500">Under Review</span>
+                    </div>
+                    <div class="w-full bg-gray-200 dark:bg-brand-800 rounded-full h-2 overflow-hidden">
+                        <div id="modal-status-bar" class="bg-amber-500 h-full rounded-full transition-all duration-500" style="width: 40%;"></div>
+                    </div>
+                </div>
+
+                <!-- Report Image -->
+                <div id="modal-image-container" class="rounded-xl overflow-hidden relative border border-gray-200 dark:border-brand-700">
+                    <img id="modal-report-img" src="" class="w-full h-44 object-cover">
+                </div>
+
+                <!-- Citizen Details -->
+                <div class="bg-gray-50 dark:bg-brand-900 p-3 rounded-xl space-y-1">
+                    <div class="flex justify-between text-[11px]">
+                        <span class="text-gray-400">Reporter:</span>
+                        <span id="modal-reporter-name" class="font-bold text-gray-800 dark:text-gray-100">Ali Raza</span>
+                    </div>
+                    <div class="flex justify-between text-[11px]">
+                        <span class="text-gray-400">Location:</span>
+                        <span id="modal-report-area" class="font-bold text-gray-800 dark:text-gray-100">Sector G-8</span>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <h4 class="font-bold text-gray-700 dark:text-gray-200 mb-1">Issue Overview</h4>
+                    <p id="modal-report-desc" class="text-gray-600 dark:text-gray-300 leading-relaxed bg-gray-50 dark:bg-brand-900 p-3 rounded-xl border border-gray-100 dark:border-brand-700"></p>
+                </div>
+
+                <!-- Admin Action Response Box -->
+                <div id="admin-controls-box" class="hidden bg-amber-50 dark:bg-brand-900/90 p-3 rounded-xl border border-amber-200 dark:border-amber-800 space-y-2">
+                    <h4 class="font-bold text-amber-800 dark:text-amber-300 text-xs flex items-center gap-1">
+                        <i class="fa-solid fa-user-shield"></i> Municipality Admin Response
+                    </h4>
+                    <div>
+                        <label class="block text-[10px] text-gray-500 mb-1 font-bold">Update Status:</label>
+                        <select id="admin-status-select" class="w-full p-2 text-xs rounded-lg bg-white dark:bg-brand-800 border border-gray-300 dark:border-brand-700 text-gray-800 dark:text-gray-100">
+                            <option value="Pending">Pending</option>
+                            <option value="Under Review">Under Review</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Resolved">Resolved</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] text-gray-500 mb-1 font-bold">Official Response Note:</label>
+                        <textarea id="admin-reply-input" rows="2" placeholder="e.g. Garbage truck #04 dispatched..." class="w-full p-2 text-xs rounded-lg bg-white dark:bg-brand-800 border border-gray-300 dark:border-brand-700 text-gray-800 dark:text-gray-100"></textarea>
+                    </div>
+                    <button onclick="saveAdminResponse()" class="w-full py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-lg transition">
+                        Update & Post Official Response
+                    </button>
+                </div>
+
+                <!-- Replies Thread -->
+                <div>
+                    <h4 class="font-bold text-gray-700 dark:text-gray-200 mb-2">Official Responses</h4>
+                    <div id="modal-replies-list" class="space-y-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 2: ABOUT AUTHORS & PROJECT INFO MODAL -->
+    <!-- ========================================== -->
+    <div id="about-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-brand-800 w-full max-w-md rounded-3xl overflow-hidden shadow-2xl p-5 border border-gray-100 dark:border-brand-700 space-y-4 max-h-[85vh] overflow-y-auto no-scrollbar">
+            
+            <div class="flex justify-between items-center border-b pb-3 border-gray-100 dark:border-brand-700">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-full bg-brand-100 dark:bg-brand-700 text-brand-600 dark:text-emerald-300 flex items-center justify-center font-bold text-lg">
+                        <i class="fa-solid fa-leaf"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base text-gray-800 dark:text-gray-100">About CLEAN MOHALLA</h3>
+                        <p class="text-[10px] text-gray-400">Grade 8 Computer Studies PBL Demonstration</p>
+                    </div>
+                </div>
+                <button onclick="closeAboutModal()" class="w-7 h-7 rounded-full bg-gray-100 dark:bg-brand-700 text-gray-600 dark:text-gray-200 flex items-center justify-center text-xs">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Authors Showcase Card -->
+            <div class="bg-gradient-to-br from-brand-800 to-brand-700 text-white p-4 rounded-2xl shadow-md space-y-2">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-300 flex items-center gap-1.5">
+                    <i class="fa-solid fa-user-pen"></i> Project Authors & Creators
+                </h4>
+                <div class="grid grid-cols-3 gap-2 text-center pt-1">
+                    <div class="bg-black/20 p-2 rounded-xl border border-white/10">
+                        <div class="w-8 h-8 rounded-full bg-yellow-400 text-brand-900 font-extrabold text-xs flex items-center justify-center mx-auto mb-1">GJ</div>
+                        <span class="font-bold text-xs block text-white">Garjees Jawaid</span>
+                        <span class="text-[9px] text-emerald-200">Lead Architect</span>
+                    </div>
+                    <div class="bg-black/20 p-2 rounded-xl border border-white/10">
+                        <div class="w-8 h-8 rounded-full bg-emerald-400 text-brand-900 font-extrabold text-xs flex items-center justify-center mx-auto mb-1">KA</div>
+                        <span class="font-bold text-xs block text-white">Kumail Abbas</span>
+                        <span class="text-[9px] text-emerald-200">Systems Engineer</span>
+                    </div>
+                    <div class="bg-black/20 p-2 rounded-xl border border-white/10">
+                        <div class="w-8 h-8 rounded-full bg-teal-400 text-brand-900 font-extrabold text-xs flex items-center justify-center mx-auto mb-1">MN</div>
+                        <span class="font-bold text-xs block text-white">Misha Naveed</span>
+                        <span class="text-[9px] text-emerald-200">UI/UX Lead</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project Vision & Purpose -->
+            <div class="space-y-2 text-xs">
+                <h4 class="font-bold text-gray-800 dark:text-gray-100 flex items-center gap-1">
+                    <i class="fa-solid fa-lightbulb text-amber-500"></i> Project Mission
+                </h4>
+                <p class="text-gray-600 dark:text-gray-300 leading-relaxed bg-gray-50 dark:bg-brand-900 p-3 rounded-xl border border-gray-100 dark:border-brand-700">
+                    CLEAN MOHALLA is a civic-tech mobile web application empowering neighborhood citizens to report waste issues, view real-time smart dustbin fill levels, learn proper waste disposal guidelines, and participate in a gamified community leaderboard.
+                </p>
+            </div>
+
+            <!-- Technology Stack -->
+            <div class="space-y-2 text-xs">
+                <h4 class="font-bold text-gray-800 dark:text-gray-100 flex items-center gap-1">
+                    <i class="fa-solid fa-code text-brand-500"></i> Technical Architecture
+                </h4>
+                <div class="grid grid-cols-2 gap-2 text-[11px]">
+                    <div class="bg-gray-50 dark:bg-brand-900 p-2 rounded-xl">
+                        <span class="font-bold block text-emerald-600 dark:text-emerald-400">Frontend Stack</span>
+                        <span class="text-gray-500 dark:text-gray-400">Single-File HTML5, Tailwind CSS, FontAwesome</span>
+                    </div>
+                    <div class="bg-gray-50 dark:bg-brand-900 p-2 rounded-xl">
+                        <span class="font-bold block text-emerald-600 dark:text-emerald-400">GIS & Telemetry</span>
+                        <span class="text-gray-500 dark:text-gray-400">HTML5 Canvas GIS Map Renderer</span>
+                    </div>
+                    <div class="bg-gray-50 dark:bg-brand-900 p-2 rounded-xl">
+                        <span class="font-bold block text-emerald-600 dark:text-emerald-400">AI Logic</span>
+                        <span class="text-gray-500 dark:text-gray-400">Pattern Scanner & CleanBot AI</span>
+                    </div>
+                    <div class="bg-gray-50 dark:bg-brand-900 p-2 rounded-xl">
+                        <span class="font-bold block text-emerald-600 dark:text-emerald-400">Backend Ready</span>
+                        <span class="text-gray-500 dark:text-gray-400">Supabase DB Architecture Schema</span>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="closeAboutModal()" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl text-xs transition">
+                Close & Return to App
+            </button>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 3: ADMIN DEMO MODE TOGGLE MODAL      -->
+    <!-- ========================================== -->
+    <div id="admin-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-brand-800 w-full max-w-sm rounded-3xl p-5 border border-gray-100 dark:border-brand-700 space-y-3">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-bold text-sm text-gray-800 dark:text-gray-100 flex items-center gap-2">
+                    <i class="fa-solid fa-user-shield text-amber-500"></i> Admin Portal Switcher
+                </h3>
+                <button onclick="toggleAdminModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <p class="text-xs text-gray-500 dark:text-gray-300">Switching to Admin mode lets you officially change complaint statuses (Pending → Resolved) and reply directly to citizen reports.</p>
+            <button onclick="enableAdminDemo()" class="w-full py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs rounded-xl shadow transition">
+                Enable Authorized Admin Mode
+            </button>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION FLOATING WIDGET -->
+    <div id="toast-notification" class="fixed top-5 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs px-4 py-2.5 rounded-full shadow-2xl flex items-center space-x-2 z-50 hidden transition duration-300">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400"></i>
+        <span id="toast-message">Notification message here</span>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        /* Web Audio Synthesizer for Touch Haptic Feedback */
+        function playUiSound(type = 'click') {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                
+                if (type === 'click') {
+                    osc.frequency.setValueAtTime(440, ctx.currentTime);
+                    gain.gain.setValueAtTime(0.05, ctx.currentTime);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.05);
+                } else if (type === 'success') {
+                    osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+                    gain.gain.setValueAtTime(0.08, ctx.currentTime);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.15);
+                }
+            } catch(e) {}
+        }
+
+        /* GLOBAL APP STATE & INITIAL DATA */
+        let state = {
+            userPoints: 180,
+            userReportCount: 14,
+            isAdmin: false,
+            currentTab: 'tab-home',
+            activeReportFilter: 'all',
+            activeBinFilter: 'all',
+            selectedReportId: null,
+            uploadedImageBase64: null,
+            leaderboard: [
+                { rank: 1, name: 'Garjees Jawaid', reports: 120, karma: 1850, title: 'Chief Sanitation Champion', avatar: 'G' },
+                { rank: 2, name: 'Hassan Raza', reports: 98, karma: 1420, title: 'Master Spotter', avatar: 'H' },
+                { rank: 3, name: 'Aariz Azam', reports: 76, karma: 1100, title: 'Eco Crusader', avatar: 'A' },
+                { rank: 4, name: 'Qirat Fatima', reports: 54, karma: 810, title: 'Mohalla Guardian', avatar: 'Q' },
+                { rank: 5, name: 'Midha Naveed', reports: 41, karma: 620, title: 'Waste Analyst', avatar: 'M' },
+                { rank: 6, name: 'Syeda Umme Habiba', reports: 33, karma: 490, title: 'Cleanliness Captain', avatar: 'S' },
+                { rank: 7, name: 'Rameen Ehsaan', reports: 27, karma: 380, title: 'Civic Watcher', avatar: 'R' }
+            ],
+            reports: [
+                {
+                    id: 'MHL-8942',
+                    reporter: 'Ali Raza',
+                    area: 'Sector G-8',
+                    house: 'House #12',
+                    category: 'Plastic & Dry Packaging',
+                    severity: 2,
+                    description: 'Large overflow of plastic drink bottles & packaging near the central park entrance.',
+                    image: 'https://images.unsplash.com/photo-1530587191325-3db32d826c18?auto=format&fit=crop&w=600&q=80',
+                    status: 'Pending',
+                    date: '2026-11-05',
+                    upvotes: 12,
+                    replies: []
+                },
+                {
+                    id: 'MHL-7421',
+                    reporter: 'Fatima Zahra',
+                    area: 'Gulberg III',
+                    house: 'Street 4',
+                    category: 'Organic & Food Waste Dump',
+                    severity: 3,
+                    description: 'Rotting food waste dumped outside bakery shop creating unbearable smell.',
+                    image: 'https://images.unsplash.com/photo-1605600659908-0ef719419d41?auto=format&fit=crop&w=600&q=80',
+                    status: 'In Progress',
+                    date: '2026-11-04',
+                    upvotes: 28,
+                    replies: [
+                        { author: 'Sanitation Officer Khan', text: 'Truck #08 dispatched. Cleaning scheduled today by 4 PM.', date: '2026-11-04' }
+                    ]
+                },
+                {
+                    id: 'MHL-6109',
+                    reporter: 'Hamza Malik',
+                    area: 'Saddar Main Market',
+                    house: 'Shop #14',
+                    category: 'Overflowing Municipal Dumpster',
+                    severity: 1,
+                    description: 'Market bin is completely full, citizens leaving boxes on ground.',
+                    image: 'https://images.unsplash.com/photo-1528323273322-d81458248d40?auto=format&fit=crop&w=600&q=80',
+                    status: 'Resolved',
+                    date: '2026-11-02',
+                    upvotes: 45,
+                    replies: [
+                        { author: 'Clean Mohalla Admin', text: 'Cleaned and sanitized. Dumpster emptied.', date: '2026-11-03' }
+                    ]
+                }
+            ],
+            bins: [
+                { id: 'BIN-101', name: 'G-8 Park Bin 1', type: 'Organic', fill: 85, distance: '120m', lat: 100, lng: 120 },
+                { id: 'BIN-102', name: 'Market Recycler', type: 'Recyclable', fill: 40, distance: '250m', lat: 200, lng: 80 },
+                { id: 'BIN-103', name: 'School E-Waste Hub', type: 'E-Waste', fill: 20, distance: '400m', lat: 150, lng: 220 },
+                { id: 'BIN-104', name: 'Sector Dumpster A', type: 'Organic', fill: 92, distance: '550m', lat: 280, lng: 190 }
+            ],
+            wasteCategories: [
+                { title: 'Wet & Organic Waste', icon: 'fa-apple-whole', bg: 'bg-green-100 text-green-700', examples: 'Food scraps, fruit peels, tea bags, garden leaves.', disposal: 'Compost bin or Green Municipal Waste container.', decom: '2 - 6 Weeks' },
+                { title: 'Plastics & Packaging', icon: 'fa-bottle-water', bg: 'bg-blue-100 text-blue-700', examples: 'PET bottles, milk jugs, clean wrappers, food tubs.', disposal: 'Rinse out and toss into Blue Recycling Dustbin.', decom: '450 Years' },
+                { title: 'Paper & Cardboard', icon: 'fa-box-open', bg: 'bg-amber-100 text-amber-700', examples: 'Newspapers, cardboard boxes, office paper, books.', disposal: 'Flatten boxes and keep dry in Yellow Bin.', decom: '2 - 5 Weeks' },
+                { title: 'Electronic Waste (E-Waste)', icon: 'fa-laptop-code', bg: 'bg-purple-100 text-purple-700', examples: 'Phones, chargers, batteries, broken cables, PCBs.', disposal: 'Deliver strictly to designated E-Waste collection kiosk.', decom: 'Non-biodegradable' },
+                { title: 'Glass Containers', icon: 'fa-wine-bottle', bg: 'bg-teal-100 text-teal-700', examples: 'Glass jars, sauce bottles, drinking glasses.', disposal: 'Handle safely, separate by color into Glass Kiosks.', decom: '1 Million Years' },
+                { title: 'Hazardous & Medical', icon: 'fa-biohazard', bg: 'bg-red-100 text-red-700', examples: 'Expired medicines, needles, paint cans, chemicals.', disposal: 'Wrap securely and hand over to hospital hazardous disposal.', decom: 'Varies' }
+            ]
+        };
+
+        /* About Modal Open/Close */
+        function openAboutModal() {
+            playUiSound('click');
+            document.getElementById('about-modal').classList.remove('hidden');
+        }
+
+        function closeAboutModal() {
+            document.getElementById('about-modal').classList.add('hidden');
+        }
+
+        /* AI CLEAN BOT CHATBOT ENGINE */
+        function sendQuickPrompt(text) {
+            document.getElementById('chat-input').value = text;
+            handleChatSubmit(new Event('submit'));
+        }
+
+        function handleChatSubmit(e) {
+            if (e && e.preventDefault) e.preventDefault();
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            if (!message) return;
+
+            playUiSound('click');
+            appendChatMessage(message, 'user');
+            input.value = '';
+
+            setTimeout(() => {
+                const response = getCleanBotResponse(message);
+                appendChatMessage(response, 'bot');
+                playUiSound('success');
+            }, 600);
+        }
+
+        function appendChatMessage(text, sender) {
+            const container = document.getElementById('chat-messages-container');
+            const msgDiv = document.createElement('div');
+            
+            if (sender === 'user') {
+                msgDiv.className = 'flex justify-end';
+                msgDiv.innerHTML = `
+                    <div class="bg-brand-600 text-white p-3 rounded-2xl rounded-tr-none text-xs max-w-[85%] shadow-sm">
+                        ${text}
+                    </div>
+                `;
+            } else {
+                msgDiv.className = 'flex gap-2.5 items-start';
+                msgDiv.innerHTML = `
+                    <div class="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs shrink-0">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div class="bg-emerald-50 dark:bg-brand-900 text-gray-800 dark:text-gray-100 p-3 rounded-2xl rounded-tl-none text-xs border border-emerald-100 dark:border-brand-700 max-w-[85%]">
+                        ${text}
+                    </div>
+                `;
+            }
+
+            container.appendChild(msgDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function clearChatLog() {
+            const container = document.getElementById('chat-messages-container');
+            container.innerHTML = `
+                <div class="flex gap-2.5 items-start">
+                    <div class="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs shrink-0">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div class="bg-emerald-50 dark:bg-brand-900 text-gray-800 dark:text-gray-100 p-3 rounded-2xl rounded-tl-none text-xs border border-emerald-100 dark:border-brand-700 max-w-[85%]">
+                        Chat log cleared. How can I assist your Mohalla cleanup today?
+                    </div>
+                </div>
+            `;
+        }
+
+        function getCleanBotResponse(query) {
+            const q = query.toLowerCase();
+
+            if (q.includes('report') || q.includes('how to report') || q.includes('trash')) {
+                return "To report garbage, tap the <strong>Report (+)</strong> tab at the bottom navigation bar. Take or upload a photo—our AI scanner will automatically categorize it!";
+            }
+            if (q.includes('author') || q.includes('who made') || q.includes('developer') || q.includes('creator')) {
+                return "This app was created by <strong>Garjees Jawaid</strong> (Lead Architect), <strong>Kumail Abbas</strong> (Systems Engineer), and <strong>Misha Naveed</strong> (UI/UX Lead) for Grade 8 Computer Studies PBL!";
+            }
+            if (q.includes('leaderboard') || q.includes('hero') || q.includes('winner') || q.includes('points')) {
+                return "Our <strong>Mohalla Heroes</strong> tab features top sanitation spotters! <strong>Garjees Jawaid</strong> leads as #1 Champion with 120 reports.";
+            }
+            if (q.includes('tip') || q.includes('clean') || q.includes('hygiene') || q.includes('recycle')) {
+                return "🌱 Always segregate wet organic food waste from dry plastics. Rinsing plastic containers before recycling prevents foul smells!";
+            }
+            if (q.includes('map') || q.includes('bin') || q.includes('dustbin')) {
+                return "Tap the <strong>Bins</strong> tab to view an interactive GIS map showing real-time fill percentages in your sector.";
+            }
+            if (q.includes('hello') || q.includes('hi') || q.includes('assalam')) {
+                return "Walaikum Assalam! I am Clean Bot. How can I help make our neighborhood cleaner today?";
+            }
+
+            return "That's a great question! Check out the <strong>Guide</strong> tab or use the <strong>Report</strong> tab to notify municipal sanitation teams.";
+        }
+
+        /* TAB NAVIGATION LOGIC */
+        function switchTab(tabId) {
+            playUiSound('click');
+            state.currentTab = tabId;
+
+            // Hide all tab sections
+            document.querySelectorAll('.tab-page').forEach(el => el.classList.add('hidden'));
+            
+            // Show selected tab section
+            const target = document.getElementById(tabId);
+            if (target) target.classList.remove('hidden');
+
+            // Reset navigation button active styles
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-brand-600', 'dark:text-emerald-400', 'font-bold');
+                btn.classList.add('text-gray-400', 'font-semibold');
+            });
+
+            const activeNavBtn = document.getElementById(`nav-${tabId}`);
+            if (activeNavBtn) {
+                activeNavBtn.classList.add('text-brand-600', 'dark:text-emerald-400', 'font-bold');
+                activeNavBtn.classList.remove('text-gray-400');
+            }
+
+            // Trigger specific tab renders
+            if (tabId === 'tab-community') renderCommunityFeed();
+            if (tabId === 'tab-map') renderGisMap();
+            if (tabId === 'tab-home') renderHomeFeedPreview();
+            if (tabId === 'tab-heroes') renderMohallaHeroes();
+        }
+
+        /* LEADERBOARD & MOHALLA HEROES RENDER LOGIC */
+        function renderMohallaHeroes() {
+            state.leaderboard.sort((a, b) => b.reports - a.reports);
+            state.leaderboard.forEach((item, index) => { item.rank = index + 1; });
+
+            const winner = state.leaderboard[0];
+            if (winner) {
+                document.getElementById('winner-name').textContent = winner.name;
+                document.getElementById('winner-avatar').textContent = winner.avatar;
+                document.getElementById('winner-title').textContent = winner.title;
+                document.getElementById('winner-report-count').innerHTML = `<i class="fa-solid fa-bullhorn mr-1"></i>${winner.reports} Reports`;
+                document.getElementById('winner-karma').innerHTML = `<i class="fa-solid fa-shield-halved mr-1"></i>${winner.karma} Karma`;
+            }
+
+            const listContainer = document.getElementById('heroes-leaderboard-list');
+            listContainer.innerHTML = state.leaderboard.map(hero => {
+                let rankBadgeBg = 'bg-gray-100 text-gray-600 dark:bg-brand-900 dark:text-gray-300';
+                let borderClass = 'border-gray-100 dark:border-brand-700/50';
+
+                if (hero.rank === 1) {
+                    rankBadgeBg = 'bg-yellow-400 text-brand-900 font-black';
+                    borderClass = 'border-yellow-400/50 bg-amber-500/5';
+                } else if (hero.rank === 2) {
+                    rankBadgeBg = 'bg-slate-300 text-slate-800 font-bold';
+                } else if (hero.rank === 3) {
+                    rankBadgeBg = 'bg-amber-700 text-yellow-100 font-bold';
+                }
+
+                return `
+                    <div class="bg-white dark:bg-brand-800 p-3 rounded-2xl shadow-sm border ${borderClass} flex items-center justify-between transition hover:scale-[1.01]">
+                        <div class="flex items-center space-x-3">
+                            <span class="w-7 h-7 rounded-full ${rankBadgeBg} flex items-center justify-center text-xs font-extrabold">
+                                #${hero.rank}
+                            </span>
+                            
+                            <div class="w-9 h-9 rounded-full bg-brand-700 text-white font-bold flex items-center justify-center text-xs shadow-sm">
+                                ${hero.avatar}
+                            </div>
+
+                            <div>
+                                <h4 class="font-bold text-xs text-gray-800 dark:text-gray-100">${hero.name}</h4>
+                                <span class="text-[10px] text-gray-400">${hero.title}</span>
+                            </div>
+                        </div>
+
+                        <div class="text-right">
+                            <span class="text-xs font-black text-brand-600 dark:text-emerald-400 block">${hero.reports} Reports</span>
+                            <span class="text-[9px] text-gray-400">${hero.karma} Karma</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        /* DARK / LIGHT THEME TOGGLE */
+        function toggleDarkMode() {
+            playUiSound('click');
+            const isDark = document.documentElement.classList.toggle('dark');
+            const icon = document.getElementById('theme-icon');
+            if (isDark) {
+                icon.className = 'fa-solid fa-sun text-xs text-yellow-400';
+            } else {
+                icon.className = 'fa-solid fa-moon text-xs';
+            }
+        }
+
+        /* TOAST NOTIFICATION CONTROLLER */
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast-notification');
+            const msgEl = document.getElementById('toast-message');
+            const iconEl = document.getElementById('toast-icon');
+
+            msgEl.textContent = message;
+            if (type === 'success') {
+                iconEl.className = 'fa-solid fa-circle-check text-emerald-400';
+                playUiSound('success');
+            } else {
+                iconEl.className = 'fa-solid fa-triangle-exclamation text-amber-400';
+            }
+
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        function toggleAnonMode(checkbox) {
+            const nameInput = document.getElementById('report-name');
+            if (checkbox.checked) {
+                nameInput.value = 'Anonymous Citizen';
+                nameInput.disabled = true;
+            } else {
+                nameInput.value = 'Tariq Mansoor';
+                nameInput.disabled = false;
+            }
+        }
+
+        function detectLocation() {
+            playUiSound('click');
+            showToast('GPS Location Detected: Sector G-8');
+            document.getElementById('report-area').value = 'Sector G-8';
+        }
+
+        function updateSeverityLabel(val) {
+            const label = document.getElementById('severity-label');
+            if (val == 1) {
+                label.textContent = 'Minor Litter';
+                label.className = 'text-xs font-extrabold text-blue-500';
+            } else if (val == 2) {
+                label.textContent = 'Medium Dump';
+                label.className = 'text-xs font-extrabold text-amber-500';
+            } else {
+                label.textContent = 'Severe Hazard';
+                label.className = 'text-xs font-extrabold text-red-500';
+            }
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                state.uploadedImageBase64 = e.target.result;
+                
+                document.getElementById('upload-placeholder').classList.add('hidden');
+                document.getElementById('preview-container').classList.remove('hidden');
+                document.getElementById('image-preview').src = e.target.result;
+                
+                const scannerLine = document.getElementById('ai-scanner-line');
+                const aiBadge = document.getElementById('ai-tag-badge');
+                scannerLine.classList.remove('hidden');
+
+                setTimeout(() => {
+                    scannerLine.classList.add('hidden');
+                    aiBadge.classList.remove('hidden');
+                    document.getElementById('report-category').value = 'Plastic & Dry Packaging';
+                    document.getElementById('ai-detected-text').textContent = 'Plastic Packaging (98% Match)';
+                    showToast('AI Waste Scanner Categorized Issue!');
+                }, 1800);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function simulateVoiceInput() {
+            playUiSound('click');
+            showToast('Listening... Speak description');
+            const desc = document.getElementById('report-desc');
+            desc.value = 'Massive heap of plastics and cardboard clogging the water drain right next to street 15.';
+        }
+
+        function handleReportSubmit(e) {
+            e.preventDefault();
+            playUiSound('success');
+
+            const newReport = {
+                id: 'MHL-' + Math.floor(1000 + Math.random() * 9000),
+                reporter: document.getElementById('report-name').value,
+                area: document.getElementById('report-area').value,
+                house: document.getElementById('report-house').value || 'Private',
+                category: document.getElementById('report-category').value,
+                severity: parseInt(document.getElementById('report-severity').value),
+                description: document.getElementById('report-desc').value,
+                image: state.uploadedImageBase64 || 'https://images.unsplash.com/photo-1530587191325-3db32d826c18?auto=format&fit=crop&w=600&q=80',
+                status: 'Pending',
+                date: new Date().toISOString().split('T')[0],
+                upvotes: 1,
+                replies: []
+            };
+
+            state.reports.unshift(newReport);
+            state.userPoints += 50;
+            document.getElementById('user-points-badge').textContent = state.userPoints;
+
+            showToast(`Report Submitted! ID: #${newReport.id} (+50 Points)`);
+
+            document.getElementById('garbage-report-form').reset();
+            document.getElementById('preview-container').classList.add('hidden');
+            document.getElementById('upload-placeholder').classList.remove('hidden');
+            state.uploadedImageBase64 = null;
+
+            switchTab('tab-community');
+        }
+
+        /* WASTE GUIDE RENDER */
+        function renderWasteGuide() {
+            const container = document.getElementById('guide-categories-grid');
+            if(!container) return;
+            container.innerHTML = state.wasteCategories.map((cat, idx) => `
+                <div onclick="openCategoryModal(${idx})" class="bg-white dark:bg-brand-800 p-3.5 rounded-2xl shadow-sm border border-gray-100 dark:border-brand-700/50 hover:border-brand-500 transition cursor-pointer flex flex-col justify-between">
+                    <div class="w-9 h-9 rounded-xl ${cat.bg} flex items-center justify-center mb-2 text-base">
+                        <i class="fa-solid ${cat.icon}"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-xs text-gray-800 dark:text-gray-100">${cat.title}</h4>
+                        <p class="text-[10px] text-gray-400 mt-0.5 line-clamp-1">${cat.examples}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function searchWasteItem(query) {
+            const box = document.getElementById('search-result-box');
+            if (!query.trim()) {
+                box.classList.add('hidden');
+                return;
+            }
+            
+            const q = query.toLowerCase();
+            let binResult = 'Dry / Plastic Bin';
+            if (q.includes('pizza') || q.includes('food') || q.includes('banana') || q.includes('apple')) binResult = 'Green Organic Bin';
+            if (q.includes('battery') || q.includes('phone') || q.includes('wire')) binResult = 'Special E-Waste Kiosk';
+            if (q.includes('bottle') || q.includes('jar')) binResult = 'Glass / Recycling Bin';
+
+            box.innerHTML = `
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-circle-info text-emerald-500 text-sm"></i>
+                    <div>
+                        <strong>"${query}"</strong> should be disposed in: 
+                        <span class="font-extrabold text-emerald-600 dark:text-emerald-400 block">${binResult}</span>
+                    </div>
+                </div>
+            `;
+            box.classList.remove('hidden');
+        }
+
+        /* GIS INTERACTIVE CANVAS MAP */
+        let mapZoom = 1;
+        function renderGisMap() {
+            const canvas = document.getElementById('gis-map-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+
+            ctx.fillStyle = '#0f172a';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.strokeStyle = '#1e293b';
+            ctx.lineWidth = 1;
+            for(let x=0; x<canvas.width; x+=30) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+            }
+            for(let y=0; y<canvas.height; y+=30) {
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+            }
+
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 14;
+            ctx.beginPath(); ctx.moveTo(20, 100); ctx.lineTo(canvas.width-20, 100); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(150, 10); ctx.lineTo(150, canvas.height-10); ctx.stroke();
+
+            state.bins.forEach(bin => {
+                if (state.activeBinFilter !== 'all' && bin.type !== state.activeBinFilter) return;
+
+                const x = bin.lat * mapZoom;
+                const y = bin.lng * mapZoom;
+
+                ctx.beginPath();
+                ctx.arc(x, y, 14, 0, Math.PI * 2);
+                ctx.fillStyle = bin.fill > 80 ? 'rgba(239, 68, 68, 0.3)' : 'rgba(46, 204, 113, 0.3)';
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.arc(x, y, 7, 0, Math.PI * 2);
+                ctx.fillStyle = bin.fill > 80 ? '#ef4444' : '#2ecc71';
+                ctx.fill();
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 9px Inter';
+                ctx.fillText(`${bin.fill}%`, x - 8, y - 10);
+            });
+
+            const container = document.getElementById('bins-list-container');
+            if(!container) return;
+            container.innerHTML = state.bins.map(bin => `
+                <div onclick="selectBin('${bin.id}')" class="bg-white dark:bg-brand-800 p-3 rounded-xl border border-gray-100 dark:border-brand-700/50 flex justify-between items-center cursor-pointer hover:border-brand-500 transition">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-full ${bin.fill > 80 ? 'bg-red-100 text-red-600' : 'bg-emerald-100 text-emerald-600'} flex items-center justify-center text-xs font-bold">
+                            <i class="fa-solid fa-trash"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-xs text-gray-800 dark:text-gray-100">${bin.name}</h4>
+                            <span class="text-[10px] text-gray-400">${bin.type} Bin • ${bin.distance}</span>
+                        </div>
+                    </div>
+                    <span class="text-xs font-black ${bin.fill > 80 ? 'text-red-500' : 'text-emerald-500'}">${bin.fill}% Full</span>
+                </div>
+            `).join('');
+        }
+
+        function selectBin(binId) {
+            playUiSound('click');
+            const bin = state.bins.find(b => b.id === binId);
+            if (!bin) return;
+
+            document.getElementById('bin-name').textContent = bin.name;
+            document.getElementById('bin-type-badge').textContent = `${bin.type} Dustbin`;
+            document.getElementById('bin-distance').textContent = `📍 ${bin.distance} away`;
+            document.getElementById('bin-fill-percent').textContent = `${bin.fill}%`;
+            document.getElementById('bin-fill-bar').style.width = `${bin.fill}%`;
+        }
+
+        function filterBins(type) {
+            playUiSound('click');
+            state.activeBinFilter = type;
+            renderGisMap();
+        }
+
+        function zoomMap(factor) {
+            mapZoom *= factor;
+            renderGisMap();
+        }
+
+        function triggerDirections() {
+            playUiSound('click');
+            showToast('Turn-by-turn navigation started!');
+        }
+
+        function reportBinOverflow() {
+            playUiSound('click');
+            showToast('Overflow alert sent to Sanitation Dept!');
+        }
+
+        /* COMMUNITY FEED RENDER */
+        function renderCommunityFeed() {
+            const container = document.getElementById('community-feed-container');
+            if(!container) return;
+            
+            const filteredReports = state.reports.filter(r => {
+                if (state.activeReportFilter === 'all') return true;
+                return r.status === state.activeReportFilter;
+            });
+
+            container.innerHTML = filteredReports.map(report => `
+                <div class="bg-white dark:bg-brand-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-brand-700/50 space-y-3">
+                    
+                    <div class="flex justify-between items-start">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-full bg-brand-700 text-white flex items-center justify-center font-bold text-xs">
+                                ${report.reporter.charAt(0)}
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xs text-gray-800 dark:text-gray-100">${report.reporter}</h4>
+                                <span class="text-[10px] text-gray-400">${report.area} • ${report.date}</span>
+                            </div>
+                        </div>
+                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold ${getStatusBadgeClass(report.status)}">
+                            ${report.status}
+                        </span>
+                    </div>
+
+                    <div onclick="openReportModal('${report.id}')" class="cursor-pointer space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] font-mono text-brand-500 font-bold">#${report.id}</span>
+                            <span class="text-[10px] text-amber-500 font-semibold">${report.category}</span>
+                        </div>
+                        <p class="text-xs text-gray-700 dark:text-gray-200 line-clamp-2">${report.description}</p>
+                        <div class="rounded-xl overflow-hidden h-36 w-full border border-gray-100 dark:border-brand-700">
+                            <img src="${report.image}" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-1 border-t border-gray-100 dark:border-brand-700 text-xs">
+                        <button onclick="upvoteReport('${report.id}')" class="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 hover:text-emerald-500 font-semibold transition">
+                            <i class="fa-solid fa-thumbs-up text-xs"></i>
+                            <span>${report.upvotes} Upvotes</span>
+                        </button>
+                        <button onclick="openReportModal('${report.id}')" class="text-brand-600 dark:text-emerald-400 font-bold hover:underline flex items-center gap-1">
+                            Details & Replies (${report.replies.length}) &rarr;
+                        </button>
+                    </div>
+
+                </div>
+            `).join('');
+        }
+
+        function renderHomeFeedPreview() {
+            const container = document.getElementById('home-recent-feed');
+            if (!container) return;
+
+            const recent = state.reports.slice(0, 2);
+            container.innerHTML = recent.map(report => `
+                <div onclick="openReportModal('${report.id}')" class="bg-white dark:bg-brand-800 p-3 rounded-2xl shadow-sm border border-gray-100 dark:border-brand-700/50 flex gap-3 cursor-pointer hover:border-brand-500 transition">
+                    <img src="${report.image}" class="w-16 h-16 rounded-xl object-cover">
+                    <div class="flex-1 min-w-0">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] font-bold text-brand-500">#${report.id}</span>
+                            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full ${getStatusBadgeClass(report.status)}">${report.status}</span>
+                        </div>
+                        <h4 class="font-bold text-xs text-gray-800 dark:text-gray-100 truncate mt-0.5">${report.category}</h4>
+                        <p class="text-[11px] text-gray-400 truncate">${report.area}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('stat-total').textContent = state.reports.length;
+            const resolvedCount = state.reports.filter(r => r.status === 'Resolved').length;
+            document.getElementById('stat-resolved').textContent = resolvedCount;
+            document.getElementById('stat-pending').textContent = state.reports.length - resolvedCount;
+        }
+
+        function getStatusBadgeClass(status) {
+            if (status === 'Resolved') return 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300';
+            if (status === 'In Progress') return 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300';
+            if (status === 'Under Review') return 'bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300';
+            return 'bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300';
+        }
+
+        function filterCommunityFeed(filter) {
+            playUiSound('click');
+            state.activeReportFilter = filter;
+            renderCommunityFeed();
+        }
+
+        function upvoteReport(id) {
+            playUiSound('click');
+            const report = state.reports.find(r => r.id === id);
+            if (report) {
+                report.upvotes += 1;
+                renderCommunityFeed();
+                showToast('Cleanup prioritized (+1 Upvote)');
+            }
+        }
+
+        /* REPORT DETAIL MODAL */
+        function openReportModal(reportId) {
+            playUiSound('click');
+            state.selectedReportId = reportId;
+            const report = state.reports.find(r => r.id === reportId);
+            if (!report) return;
+
+            document.getElementById('modal-report-id').textContent = `#${report.id}`;
+            document.getElementById('modal-report-title').textContent = report.category;
+            document.getElementById('modal-status-text').textContent = report.status;
+            document.getElementById('modal-report-img').src = report.image;
+            document.getElementById('modal-reporter-name').textContent = report.reporter;
+            document.getElementById('modal-report-area').textContent = report.area;
+            document.getElementById('modal-report-desc').textContent = report.description;
+
+            const statusBar = document.getElementById('modal-status-bar');
+            if (report.status === 'Pending') statusBar.style.width = '20%';
+            else if (report.status === 'Under Review') statusBar.style.width = '45%';
+            else if (report.status === 'In Progress') statusBar.style.width = '75%';
+            else if (report.status === 'Resolved') statusBar.style.width = '100%';
+
+            const repliesList = document.getElementById('modal-replies-list');
+            if (report.replies.length === 0) {
+                repliesList.innerHTML = `<p class="text-[11px] text-gray-400 italic">No official updates posted yet.</p>`;
+            } else {
+                repliesList.innerHTML = report.replies.map(rep => `
+                    <div class="bg-emerald-50 dark:bg-brand-900 p-2.5 rounded-xl border border-emerald-100 dark:border-emerald-800">
+                        <div class="flex justify-between items-center text-[10px] font-bold text-brand-700 dark:text-emerald-300">
+                            <span><i class="fa-solid fa-circle-check"></i> ${rep.author}</span>
+                            <span class="text-gray-400">${rep.date}</span>
+                        </div>
+                        <p class="text-xs text-gray-700 dark:text-gray-200 mt-1">${rep.text}</p>
+                    </div>
+                `).join('');
+            }
+
+            const adminBox = document.getElementById('admin-controls-box');
+            if (state.isAdmin) {
+                adminBox.classList.remove('hidden');
+                document.getElementById('admin-status-select').value = report.status;
+            } else {
+                adminBox.classList.add('hidden');
+            }
+
+            document.getElementById('report-detail-modal').classList.remove('hidden');
+        }
+
+        function closeReportModal() {
+            document.getElementById('report-detail-modal').classList.add('hidden');
+        }
+
+        function saveAdminResponse() {
+            playUiSound('success');
+            const report = state.reports.find(r => r.id === state.selectedReportId);
+            if (!report) return;
+
+            const newStatus = document.getElementById('admin-status-select').value;
+            const replyText = document.getElementById('admin-reply-input').value;
+
+            report.status = newStatus;
+            if (replyText.trim()) {
+                report.replies.push({
+                    author: 'Clean Mohalla Official',
+                    text: replyText,
+                    date: new Date().toISOString().split('T')[0]
+                });
+            }
+
+            showToast('Complaint Status Updated!');
+            closeReportModal();
+            renderCommunityFeed();
+            renderHomeFeedPreview();
+        }
+
+        /* ADMIN MODE TOGGLING */
+        function toggleAdminModal() {
+            playUiSound('click');
+            const modal = document.getElementById('admin-modal');
+            modal.classList.toggle('hidden');
+        }
+
+        function enableAdminDemo() {
+            playUiSound('success');
+            state.isAdmin = true;
+            document.getElementById('admin-indicator').classList.remove('hidden');
+            document.getElementById('active-mode-badge').textContent = 'Admin Mode Active';
+            document.getElementById('active-mode-badge').className = 'bg-amber-100 text-amber-700 font-bold px-2 py-0.5 rounded-full text-[10px]';
+            
+            toggleAdminModal();
+            showToast('Admin Mode Enabled!');
+            if (state.currentTab === 'tab-community') renderCommunityFeed();
+        }
+
+        /* INITIALIZATION ON APP LOAD */
+        window.onload = function() {
+            renderHomeFeedPreview();
+            renderWasteGuide();
+            selectBin('BIN-101');
+        };
+    </script>
+</body>
+</html>
